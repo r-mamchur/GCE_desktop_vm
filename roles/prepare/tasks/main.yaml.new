@@ -1,0 +1,35 @@
+- name: Install tools
+  yum:
+    name: "{{ util }}"
+  vars:
+    util:
+    - mc
+    - wget
+    - unzip
+    - git
+    - yum-utils
+    state: installed
+
+- name: Install users
+  debug:
+    msg: "{{ gui_user }}"
+
+- name: llll users
+  debug:
+    msg: "{{ item.name }}"
+  loop: "{{ gui_user }}"
+
+- name: 55l users
+  shell: "echo {{ item.name }} - {{ item.password }} - {{ item.comment }}"
+  loop: "{{ gui_user }}"
+
+- name: Create  user
+  user:
+     name: "{{ item.name }}"
+     password: "{{item.password |  password_hash('sha512') }}"
+     comment: "{{item.comment}}"
+     state: present
+     shell: /bin/bash
+     groups: wheel
+     system: yes
+  loop: "{{ gui_user }}"                                     

@@ -1,0 +1,8 @@
+# the number of users is variable
+gui_user:
+  -  name: "rm"
+     password: "qwerty7("
+     comment: "Roman Mamchur"
+  -  name: "at"
+     password: "qwerty7("
+     comment: "Arsen Tytarenko"

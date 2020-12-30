@@ -1,0 +1,46 @@
+- name: install the 'X Window System' package group
+  yum:
+      name: "@X Window System"
+      state: present
+      
+- name: install the 'Fonts' group
+  yum:
+      name: "@Fonts"
+      state: present
+      
+- name: install the 'Xfce
+  yum:
+      name: "@Xfce"
+      state: present 
+      
+- name: Install GUI tools
+  yum:
+      name: "{{ util }}"
+  vars:
+    util:
+    - xrdp
+    - tigervnc-server
+    - tigervnc-server-module
+    - firefox
+    - gtk-xfce-engine
+    - xfce4-calculator-plugin
+    state: installed
+
+- name: Start RDP service
+  service:
+      name: xrdp
+      state: started
+      enabled: yes
+              
+- name: Setings
+  shell: |
+     echo "PREFERRED=startxfce4" >> /etc/sysconfig/desktop
+     echo "[security]" >>/etc/gdm/custom.conf
+     echo "AllowRemoteRoot=true" >>/etc/gdm/custom.conf
+     echo "DisallowTCP=false" >>/etc/gdm/custom.conf
+     echo " " >>/etc/gdm/custom.conf
+     echo "[xdmcp]" >>/etc/gdm/custom.conf
+     echo "Enable=true" >>/etc/gdm/custom.conf
+     echo "MaxSessions=30" >>/etc/gdm/custom.conf
+     
+     

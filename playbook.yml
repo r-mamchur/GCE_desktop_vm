@@ -1,0 +1,28 @@
+---
+- name: ansible test
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  become: True
+  tasks:
+    - name: ping
+      ping:
+    - name: vars
+      include_vars:
+         file: conf_vars.yml 
+ 
+- name: prep
+  hosts: localhost
+  connection: local
+  become: true
+  roles:
+     - role: prepare
+
+- name: GUI
+  hosts: localhost
+  connection: local
+  become: true
+  roles:
+     - role: GUI
+
+          
