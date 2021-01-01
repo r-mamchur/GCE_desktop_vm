@@ -1,7 +1,6 @@
 #
 resource "google_compute_address" "static_ip_desc7" {
   name    = "static-ip-desc7"
-#  purpose = "GCE_ENDPOINT"
 }
 
 resource "google_compute_firewall" "allow-desc" {
@@ -26,15 +25,14 @@ resource "google_compute_firewall" "allow-desc" {
 
 resource "google_compute_instance" "vm_desc7" {
   name         = "vm-desc7"
-  machine_type = "n1-highmem-2"
-  tags         = ["desc", "centos-7", "desc-fw"]
-  deletion_protection = true
+  machine_type = var.machine_type
+  tags         = ["desc-fw"]
+  deletion_protection = false
   depends_on = ["google_compute_address.static_ip_desc7", "google_compute_network.vpc_network"]
 
   metadata = {
    ssh-keys = "root:${file(var.public_key_path_of_root)} terr:${file(var.public_key_path)}" 
   }
-  metadata_startup_script = "id > /test.txt"
 
   boot_disk {
     initialize_params {

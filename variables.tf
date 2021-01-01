@@ -25,10 +25,16 @@ variable "disk_image" {
   default     = "centos-7-v20201216"
 }
 
-variable "allow_ports_desk" {
-  default =  ["22","5000-6000", "8080-9100", "3389"]
+# gcloud compute machine-types list
+variable "machine_type" {
+  description = "The machine type to create."
+  default     = "n1-highmem-2"
 }
 
+variable "allow_ports_desk" {
+  description = "TCP, UDP allow port"
+  default =  ["22","5000-6000", "8080-9100", "3389"]
+}
 
 variable "public_key_path" {
   description = "Path to the ssh public key of user TERR"

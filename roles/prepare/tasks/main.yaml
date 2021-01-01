@@ -10,7 +10,23 @@
     - yum-utils
     - nano
     - jq
+    - tree
+    - sshfs
+    - davfs2
+    - sos
+    - cockpit
+    - cockpit-dashboard 
+#    - cockpit-docker  -- conflict
+    - cockpit-storaged
+    - cockpit-sosreport
+    - cockpit-packagekit
     state: installed
+
+- name: Start Cockpit socket
+  service:
+     name: cockpit.socket
+     state: started
+     enabled: yes
 
 - name: Add Docker repo
   get_url:
@@ -47,12 +63,6 @@
   selinux:
      state: disabled
 
-#- name: ensure net.bridge.bridge-nf-call-ip6tables is set to 1
-#  sysctl:
-#    name: net.bridge.bridge-nf-call-ip6tables
-#    value: 1
-#    state: present
-
 - name: ensure net.bridge.bridge-nf-call-iptables is set to 1
   sysctl:
      name: net.bridge.bridge-nf-call-iptables
@@ -73,12 +83,6 @@
      state: present
      allow_downgrade: yes
 
-#- name: Add repository HashiCorp
-#  yum_repository:
-#    name: hashicorp
-#    description: HashiCorp YUM repo
-#    baseurl: https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
-
 - name: Add HashiCorp repo
   get_url:
      url: https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
@@ -88,11 +92,6 @@
   yum:
     name: terraform
     state: installed
-
-#- name: Helm
-#  get_url:
-#     url: https://get.helm.sh/helm-v3.4.2-linux-amd64.tar.gz
-#     dest: /usr/local
 
 - name: Helm download and unarh
   unarchive:
@@ -110,12 +109,7 @@
     owner: root
     group: root
     mode: 0755
-            
         
-#  shell: echo "export PATH=/usr/local/bin:\$PATH" >/etc/profile.d/path.sh
-#  when:
-#      -  '"/etc/profile.d/path.sh" is not exists'
-
 - name: add PATH
   shell: echo "export PATH=/usr/local/bin:\$PATH" >/etc/profile.d/path.sh
   when:
@@ -139,16 +133,6 @@
      name: wheel
      state: present
 
-#- name: Create  user
-#  user:
-#     name: "{{rm_user.name}}"
-#     password: "{{rm_user.password |  password_hash('sha512') }}"
-#     comment: "{{rm_user.comment}}"
-#     state: present
-#     shell: /bin/bash
-#     groups: wheel
-#     system: yes
- 
 - name: Create  user
   user:
      name: "{{ item.name }}"
